@@ -72,7 +72,7 @@ class Visualizador:
         """
         self.dataframe = dataframe
 
-    def exploracion_datos(dataframe):
+    def exploracion_datos(self):
         """
         Realiza una exploración básica de los datos en el DataFrame dado e imprime varias estadísticas descriptivas.
 
@@ -93,32 +93,32 @@ class Visualizador:
 
         """
 
-        print(f"El número de filas es {dataframe.shape[0]} y el número de columnas es {dataframe.shape[1]}")
+        print(f"El número de filas es {self.dataframe.shape[0]} y el número de columnas es {self.dataframe.shape[1]}")
 
         print("\n----------\n")
 
-        print(f"En este conjunto de datos tenemos {dataframe.duplicated().sum()} valores duplicados")
+        print(f"En este conjunto de datos tenemos {self.dataframe.duplicated().sum()} valores duplicados")
 
         
         print("\n----------\n")
 
 
         print("Los columnas con valores nulos y sus porcentajes son: ")
-        dataframe_nulos = dataframe.isnull().sum()
+        dataframe_nulos = self.dataframe.isnull().sum()
 
-        display((dataframe_nulos[dataframe_nulos.values >0] / dataframe.shape[0]) * 100)
+        display((dataframe_nulos[dataframe_nulos.values >0] / self.dataframe.shape[0]) * 100)
 
         print("\n----------\n")
         print("Las principales estadísticas de las variables númericas son:")
-        display(dataframe.describe().T)
+        display(self.dataframe.describe().T)
 
         print("\n----------\n")
         print("Las principales estadísticas de las variables categóricas son:")
-        display(dataframe.describe(include = "O").T)
+        display(self.dataframe.describe(include = "O").T)
 
         print("\n----------\n")
         print("Las características principales del dataframe son:")
-        display(dataframe.info())
+        display(self.dataframe.info())
 
     def separar_dataframes(self):
         """
