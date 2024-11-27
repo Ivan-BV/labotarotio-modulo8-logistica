@@ -109,12 +109,12 @@ class AnalisisModelosClasificacion:
 
         # Parámetros predeterminados por modelo
         parametros_default = {
-            "logistic_regression": [
-                {'penalty': ['l1'], 'solver': ['saga'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
-                {'penalty': ['l2'], 'solver': ['liblinear'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
-                {'penalty': ['elasticnet'], 'solver': ['saga'], 'l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
-                {'penalty': ['none'], 'solver': ['lbfgs'], 'max_iter': [10000]}
-            ],
+            # "logistic_regression": [
+            #     {'penalty': ['l1'], 'solver': ['saga'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
+            #     {'penalty': ['l2'], 'solver': ['liblinear'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
+            #     {'penalty': ['elasticnet'], 'solver': ['saga'], 'l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'max_iter': [10000]},
+            #     {'penalty': ['none'], 'solver': ['lbfgs'], 'max_iter': [10000]}
+            # ],
             # "logistic_regression": {
             #     'penalty': ['l1', 'l2', 'elasticnet', 'none'],
             #     'C': [0.01, 0.1, 1, 10, 100],
@@ -271,8 +271,17 @@ class AnalisisModelosClasificacion:
         # Calcular los puntos de la curva ROC
         fpr, tpr, thresholds = roc_curve(self.y_test, self.resultados[modelo_nombre]["pred_test"])
 
+        modelo = self.resultados[modelo_nombre]["mejor_modelo"]
+        if modelo is None:
+            raise ValueError(f"Debe ajustar el modelo '{modelo_nombre}' antes de calcular la curva ROC.")
+
+        if not hasattr(modelo, "predict_proba"):
+            raise ValueError(f"El modelo '{modelo_nombre}' no soporta predicción de probabilidades, no se puede calcular ROC.")
+
+        prob_test = modelo.predict_proba(self.X_test)[:, 1]
+
         # Calcular el AUC
-        auc = roc_auc_score(self.y_test, self.resultados[modelo_nombre]["pred_test"])
+        auc = roc_auc_score(self.y_test, prob_test)
 
         # Graficar la curva ROC
         plt.figure(figsize=(8, 6))

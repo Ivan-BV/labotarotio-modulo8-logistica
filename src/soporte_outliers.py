@@ -381,7 +381,7 @@ class GestionOutliersMultivariados:
 
         clf = LocalOutlierFactor(n_neighbors=n_neighbors, contamination=contaminacion)
         y_pred = clf.fit_predict(self.dataframe[col_numericas])
-        df_lof[f"outlier_lof_{n_neighbors}_{contaminacion}"] = y_pred
+        df_lof[f"outlier"] = y_pred
 
         return df_lof
 
